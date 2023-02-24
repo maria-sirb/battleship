@@ -18,12 +18,38 @@ describe("ship placing", () => {
         let ship = Ship("battleship");
         expect(gameBoard.isPlaceAvailable(ship, 1, 0, false)).toBe(false);
     });
-    test("place second ship over anoter", () => {
+    test("place ship over anoter", () => {
         let ship = Ship("battleship");
         expect(gameBoard.placeShip(ship, 1, 0, false)).toEqual({rstart: -1, rend: -1, cstart: -1, cend: -1});
+    });
+    test("place ship right next to another", () => {
+        let ship = Ship("battleship");
+        expect(gameBoard.placeShip(ship, 3, 0, false)).toEqual({rstart: -1, rend: -1, cstart: -1, cend: -1});
     });
     test("place ship outside board", () => {
         let ship = Ship("battleship");
         expect(gameBoard.placeShip(ship, 8, 8, false)).toEqual({rstart: -1, rend: -1, cstart: -1, cend: -1})
     });
+});
+describe("attack", () => {
+
+    let gameBoard = GameBoard(10);
+    let ship = Ship("cruiser");
+    gameBoard.placeShip(ship, 0, 1, true);
+
+    test("missed hit", () => {
+       expect(gameBoard.receiveAttack(5, 5)).toBe(-1); 
+    });
+    test("hit ship", () => {
+       gameBoard.receiveAttack(0, 1);
+       expect(gameBoard.board[0][1]).toBe(1);
+    });
+    test("game not over", () => {
+        expect(gameBoard.isGameOver()).toBe(false);
+    });
+    test("game over", () => {
+        gameBoard.receiveAttack(1, 1);
+        gameBoard.receiveAttack(2, 1);
+        expect(gameBoard.isGameOver()).toBe(true);
+    })
 });
