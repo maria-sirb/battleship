@@ -7,27 +7,31 @@ describe('properties', () => {
     test("length", () => {
         expect(ship.length).toBe(5);
     });
-    test("hits", () => {
-        expect(ship.hits).toEqual([false, false, false, false, false]);
+    test("hitNo", () => {
+        expect(ship.hitNo).toBe(0);
     });
 });
 describe('functions', () => {
     let ship = Ship("carrier");
     test('one hit', () => {
-        expect(ship.hit(2)).toEqual([false, false, true, false, false]);
+       // expect(ship.hit(2)).toEqual([false, false, true, false, false]);
+       expect(ship.hit()).toBe(1);
     });
-    test('wrong hit', () => {
+    /*test('wrong hit', () => {
         expect(ship.hit(9)).toEqual([false, false, true, false, false]);
-    });
+    });*/
     test('not sunk', () => {
         expect(ship.isSunk()).toBe(false);
     })
     test('sunk', () => {
-        ship.hit(0);
-        ship.hit(1);
-        ship.hit(3);
-        ship.hit(4);
+        ship.hit();
+        ship.hit();
+        ship.hit();
+        ship.hit();
         expect(ship.isSunk()).toBe(true);
+    })
+    test("hit after sunk", () => {
+        expect(ship.hit()).toBe(5);
     })
 
 });

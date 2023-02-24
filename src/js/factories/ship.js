@@ -3,24 +3,31 @@ const { ShipLenghts } = require("../helpers");
 let Ship = (shipType) => {
     let type = shipType;
     let length = ShipLenghts[type];
-    let hits = Array(length).fill(false);
+    //let hits = Array(length).fill(false);
+    let hitNo = 0;
 
-    let hit = function (position) {
-        
-        if(position >= 0 && position < length)
+    let hit = function () {
+
+        //if(position >= 0 && position < length)
+        if(hitNo < length)
         {
-            hits[position] = true;
+           // hits[position] = true;
+           hitNo++;
         }
-        return hits;
+        return hitNo;
     }
 
     let isSunk = function(){
 
-        if(hits.indexOf(false) >= 0)
+        //if(hits.indexOf(false) >= 0)
+        if(hitNo < length)
             return false;
         else 
             return true;    
     }
-    return {type, length, hits, hit, isSunk};
+    let getHits = function(){
+        return hitNo;
+    }
+    return {type, length, hitNo, hit, isSunk, getHits};
 }
 module.exports = Ship;
