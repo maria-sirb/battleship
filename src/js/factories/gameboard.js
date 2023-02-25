@@ -32,6 +32,7 @@ let GameBoard = (boardSize) =>{
                 for(let j =  positions.cstart; j <=  positions.cend; j++)
                 {
                     board[i][j] = ship;
+                    
                 }
             }
         }

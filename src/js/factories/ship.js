@@ -8,10 +8,8 @@ let Ship = (shipType) => {
 
     let hit = function () {
 
-        //if(position >= 0 && position < length)
         if(hitNo < length)
         {
-           // hits[position] = true;
            hitNo++;
         }
         return hitNo;
