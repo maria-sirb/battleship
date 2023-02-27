@@ -1,0 +1,25 @@
+.board{
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+}
+.cell{
+    border: 1px solid black;
+}
+.place-available{
+    background-color: rgb(107, 238, 157);
+}
+.place-unavailable{
+    background-color: rgb(252, 137, 137);
+}
+.occupied{
+    background-color: lightsalmon;
+}
+.hit
+{
+    background-color: coral;
+}
+.missed
+{
+    background-color: darkolivegreen;
+}

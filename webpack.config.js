@@ -13,12 +13,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
    devServer: {
     static: './dist',
   },
+  experiments: {
+    topLevelAwait: true
+  },
   optimization: {
     runtimeChunk: 'single',
   },
    plugins: [
     new HtmlWebpackPlugin({
-      title: 'Output Management',
+      title: 'Battleship',
+      template: 'src/index.html'
     }),
   ],
   module: {

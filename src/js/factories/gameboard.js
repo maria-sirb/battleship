@@ -42,7 +42,7 @@ let GameBoard = (boardSize) =>{
     {
         if(!isVertical)
         { 
-            if(row < 0 || row >= size || column < 0 || column + ship.length  >= size )
+            if(row < 0 || row >= size || column < 0 || column + ship.length  > size )
            {
                 return false;
            }
@@ -81,7 +81,7 @@ let GameBoard = (boardSize) =>{
         }
         else if(isVertical)
         {
-            if(row < 0 || row  + ship.length >= size || column < 0 || column >= size )
+            if(row < 0 || row  + ship.length > size || column < 0 || column >= size )
             {
                 return false;
             }
