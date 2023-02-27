@@ -7,7 +7,7 @@ export let Game = (playerName) =>
 {
     let humanPlayer = Player(playerName);
     let computer = Player("Computer");
-    let ships = ["battleship", "carrier", "cruiser", "submarine", "destroyer"];
+    let ships = ["carrier", "battleship", "cruiser", "submarine", "destroyer"];
     
     let placeComputerShips = () => {
 
@@ -16,11 +16,12 @@ export let Game = (playerName) =>
         })
     }
 
-    async function placeHumanShips () {
+    async function placeShips () {
 
-       handleShipPlacing(humanPlayer, ships, false);       
+       placeComputerShips();
+       handleShipPlacing(humanPlayer, ships, computer);       
        
     }
     
-    return {humanPlayer, computer, ships, placeComputerShips, placeHumanShips};
+    return {humanPlayer, computer, ships, placeComputerShips, placeShips};
 }
