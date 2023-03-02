@@ -48,26 +48,8 @@ let Player = (playerName) => {
     let makeRandomMove = (enemyGameboard) => {
 
         //if there are no next moves make random move
-        if(nextMoves.length == 0)
-        {
-            let row, column, move;
-            do
-            {
-                row = getRandomNumber(0, 9);
-                column = getRandomNumber(0, 9);
-                move = makeMove(enemyGameboard, row, column);
-
-            }while(move == false);
-
-            if(enemyGameboard.board[row][column] == 1)
-            {
-                lastHit = [row, column];
-                AddNextMoves(row, column);
-            }
-            console.log("move:" + [row, column]);
-            return [row, column];
-        }
-        else
+        let move = true;
+        if(nextMoves.length > 0)
         {
             let column = -1, row = -1;
             //check for two hits in a row (two 1)
@@ -89,7 +71,7 @@ let Player = (playerName) => {
             }
 
             AlterNextMoves(row, column);
-            let move, coordsPair;
+            let coordsPair;
 
             do
             {
@@ -98,14 +80,37 @@ let Player = (playerName) => {
 
             }while(move == false && nextMoves.length > 0);
 
-            console.log("move:" + coordsPair);
-
-            if(enemyGameboard.board[coordsPair[0]][coordsPair[1]] == 1)
+            if(move)
             {
-                lastHit = coordsPair;
-                AddNextMoves(coordsPair[0], coordsPair[1]);
+                if(enemyGameboard.board[coordsPair[0]][coordsPair[1]] == 1)
+                {
+                    lastHit = coordsPair;
+                    AddNextMoves(coordsPair[0], coordsPair[1]);
+                }
+                return coordsPair;
             }
-            return coordsPair;
+           
+        }
+
+        if((nextMoves.length == 0 && move) || !move)
+        {
+           // console.log(nextMoves.length + " " + move);
+           // console.log("making random move");
+            let row, column, move;
+            do
+            {
+                row = getRandomNumber(0, 9);
+                column = getRandomNumber(0, 9);
+                move = makeMove(enemyGameboard, row, column);
+
+            }while(move == false);
+
+            if(enemyGameboard.board[row][column] == 1)
+            {
+                lastHit = [row, column];
+                AddNextMoves(row, column);
+            }
+            return [row, column];
         }
        
     }
