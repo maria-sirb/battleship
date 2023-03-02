@@ -133,7 +133,7 @@ export let displayWinnerScreen = (text) => {
 
     removeGameScreen();
     let winnerScreen = document.createElement("div");
-    winnerScreen.classList.add = "winner-screen";
+    winnerScreen.classList.add("winner-screen");
     winnerScreen.innerHTML = 
     `
         <h1 class = "winner-text">${text}</h1>

@@ -95,6 +95,11 @@ button {
     color: var(--dark-blue);
     border-radius: 10px;
 }
+.new-game-btn{
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+}
 button:hover{
     transform: scale(1.1);    
 }
