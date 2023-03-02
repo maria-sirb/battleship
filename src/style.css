@@ -1,25 +1,120 @@
+@font-face {
+    font-family: "Under Authority";
+    src: url('./fonts/UnderAuthority.ttf');
+  }
+:root{
+    --dark-blue : rgb(1, 18, 43);
+
+}
 .board{
     display: grid;
-    grid-template-columns: repeat(10, 30px);
-    grid-template-rows: repeat(10, 30px);
+    grid-template-columns: repeat(10, 45px);
+    grid-template-rows: repeat(10, 45px);
 }
 .cell{
-    border: 1px solid black;
+    border: 2px solid var(--dark-blue);
+    background-color: white;
+   
 }
 .place-available{
-    background-color: rgb(107, 238, 157);
+    background:rgb(107, 238, 157);
 }
 .place-unavailable{
-    background-color: rgb(252, 137, 137);
+    background:rgb(252, 137, 137);
 }
 .occupied{
-    background-color: lightsalmon;
+    background-color: rgb(76, 77, 83);
 }
 .hit
 {
-    background-color: coral;
+    background-color: rgb(236, 4, 4);
 }
 .missed
 {
-    background-color: darkolivegreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+.empty, .missed{
+   background-position: 0px 5px;
+   background-size:  cover;           
+   background-image: url("./images/sea-bigger.png");
+}
+.missed svg {
+    width: 45px;
+    height: 45px;
+}
+.missed svg path{
+    fill: rgb(236, 4, 4);
+}
+body{
+    background-color: var(--dark-blue);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+}
+.title{
+    font-size: 55px;
+    font-family: 'Under Authority';
+}
+.board-container{
+    text-align: center;
+    font-size: 18px;
+   
+}
+.game-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 80px;  
+}
+.game-container h1{
+    text-align: center;
+}
+.boat-type {
+    color: pink;
+}
+.winner-screen{
+    text-align: center;
+}
+.winner-text{
+    font-size: 40px;
+    color: pink;
+}
+button {
+    width: 120px;
+    height: 35px;
+    margin: 3px;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: pink;
+    color: var(--dark-blue);
+    border-radius: 10px;
+}
+button:hover{
+    transform: scale(1.1);    
+}
+@media (max-width : 400px)
+{
+    .board{
+        display: grid;
+        grid-template-columns: repeat(10, 25px);
+        grid-template-rows: repeat(10, 25px);
+    }
+    .cell{
+        border: 1px solid var(--dark-blue);
+    }
+    .missed, .empty{
+        background-image: url("./images/sea.png");
+        background-position: 0px 2px;
+    }
+    .missed svg {
+        width: 30px;
+        height: 30px;
+    }
+}
+
