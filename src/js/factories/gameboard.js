@@ -146,6 +146,6 @@ let GameBoard = (boardSize) =>{
         else
             return false;
     }
-    return {board, placeShip, isPlaceAvailable, receiveAttack, isGameOver};
+    return {board, placeShip, isPlaceAvailable, receiveAttack, isGameOver, ships};
 } 
 module.exports = GameBoard;

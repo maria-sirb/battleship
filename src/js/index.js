@@ -5,14 +5,6 @@ import "../style.css";
 import { Game } from "./factories/game";
 
 
-let currentGame = Game("Human");
+let currentGame = Game("human");
 displayShipPlacingScreen(currentGame.humanPlayer.getGameboard().board);
-//displayBoard(currentGame.humanPlayer.getGameboard().board);
-currentGame.placeShips();
-//let board = await waitForBoard(".board");
-//if(await board)
-//{
-    //console.log(board);
-    
-    
-//}
+currentGame.initializeGame();

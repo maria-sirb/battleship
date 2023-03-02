@@ -1,4 +1,4 @@
-import { addClickPlace, placeOnClick, handleShipPlacing } from "../dom";
+import { addClickPlace, placeOnClick, handleShipPlacing, play, waitForBoard, startGame } from "../dom";
 
 const Player = require("./player");
 const Ship = require("./ship");
@@ -16,12 +16,13 @@ export let Game = (playerName) =>
         })
     }
 
-    async function placeShips () {
+   function initializeGame() {
 
-       placeComputerShips();
-       handleShipPlacing(humanPlayer, ships, computer);       
-       
+        placeComputerShips();
+        startGame(humanPlayer, ships, computer);
+
     }
+
     
-    return {humanPlayer, computer, ships, placeComputerShips, placeShips};
+    return {humanPlayer, computer, ships, placeComputerShips, initializeGame};
 }

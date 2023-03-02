@@ -10,12 +10,14 @@ export function displayGameScreen(human, computer)
     container.classList = "game-container";
     container.innerHTML = 
     `   <div>
-        <h1>${human.getName()}</h1>
-        <div class = "board-containerh"></div>
+        <h1>Your Board</h1>
+        <div class = "board-containerh">
+        </div>
        </div>
         <div>
-        <h1>${computer.getName()}</h1>
-        <div class = "board-containerc"></div>
+        <h1>${computer.getName()}'s Board</h1>
+        <div class = "board-containerc">
+        </div>
         </div>
     `;
     body.appendChild(container);
@@ -23,6 +25,7 @@ export function displayGameScreen(human, computer)
     refreshBoard(human.getGameboard().board, "h");
     displayBoard(computer.getGameboard().board, "c");
    // refreshBoard(computer.getGameboard().board, "c");
+   
 
 }
 export function removeShipPlacingScreen() 
@@ -37,9 +40,12 @@ export function displayShipPlacingScreen(board){
     let body = document.querySelector("body");
     let container = document.createElement('div');
     container.classList = "board-container";
+    let boatTypeText = document.createElement("div");
+    boatTypeText.classList = "boat-type";
     let rotateBtn = document.createElement("button");
     rotateBtn.classList.add("rotate-btn");
     rotateBtn.textContent = "Rotate";
+    container.appendChild(boatTypeText);
     container.appendChild(rotateBtn);
     body.appendChild(container);
     displayBoard(board);
@@ -48,9 +54,6 @@ export function displayShipPlacingScreen(board){
 
 export function displayBoard (board, playerType = "") {
 
-    console.log(board);
-    console.log(playerType);
-    console.log(document.querySelector(`.board-container${playerType}`));
     let container = document.querySelector(`.board-container${playerType}`);
     let boardElem = document.createElement("div");
     boardElem.classList.add("board");
@@ -84,9 +87,11 @@ export function refreshBoard(board, playerType = "")
             }
             else if(board[i][j] == -1)
             {
+                cell.classList.remove("empty");
                 cell.classList.add("missed");
+                cell.innerHTML = "<svg viewBox='0 0 24 24'><path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z' /></svg>";
             }
-            else
+            else if(playerType != "c")
             {
                 cell.classList.remove("empty");
                 cell.classList.add("occupied");
@@ -94,6 +99,7 @@ export function refreshBoard(board, playerType = "")
         }
     }
 }
+
 
 export function waitForBoard (selector) {
     return new Promise(resolve => {
@@ -115,9 +121,32 @@ export function waitForBoard (selector) {
     });
 
 }
+export function removeGameScreen() 
+{
+    let gameScreen = document.querySelector(".game-container");
+    let body = document.querySelector("body");
+    body.removeChild(gameScreen);
+}
 
-export let handleShipPlacing = (player, ships, computer) => {
+
+export let displayWinnerScreen = (text) => {
+
+    removeGameScreen();
+    let winnerScreen = document.createElement("div");
+    winnerScreen.classList.add = "winner-screen";
+    winnerScreen.innerHTML = 
+    `
+        <h1 class = "winner-text">${text}</h1>
+        <button class = "new-game-btn">New game</button>
+    `
+    document.querySelector("body").append(winnerScreen);
+    let newGameBtn = document.querySelector(".new-game-btn");
+    newGameBtn.addEventListener('click', () => window.location.reload());
+
+}
+export async function startGame(player, ships, computer) {
     let currShipIndex = [0];
+    document.querySelector(".boat-type").textContent = `Place your ${ships[currShipIndex]}`;
     let isVertical = [false];
     let rotateBtn = document.querySelector(".rotate-btn");
     let cells = document.querySelectorAll(".cell");
@@ -130,42 +159,31 @@ export let handleShipPlacing = (player, ships, computer) => {
         cell.addEventListener('mouseleave', () => {
             removeHoverEffect(cell, Ship(ships[currShipIndex[0]]), isVertical[0]);
         });
-        cell.addEventListener('click',() => {
-           placeShip(Ship(ships[currShipIndex[0]]), cell, isVertical[0], player, currShipIndex);
+        cell.addEventListener('click',async () => {
+           placeShip(Ship(ships[currShipIndex[0]]), cell, isVertical[0], player, currShipIndex, ships);
            if(currShipIndex[0] >= 5)
            {
-            console.log(computer.getGameboard().board);
-                displayGameScreen(player, computer);
+               displayGameScreen(player, computer);
+               play(player, computer);
+
            }
         });          
 
     });
-    
 }
 export let rotate = (isVertical) => {
 
     isVertical[0] = !isVertical[0];
-    console.log(isVertical);
-
 }
 
-export let placeOnClick = (currShipIndex) => {
-    let cells = document.querySelectorAll(".cell");
-    for(let i = 0; i < cells.length; i++)
-    {   
-        cells[i].addEventListener('click',() => getCoords(cells[i], currShipIndex));
-    }   
-}
-
-let placeShip = (ship, cell, isVertical, player, currShipIndex) =>
+let placeShip = (ship, cell, isVertical, player, currShipIndex, ships) =>
 {
-    console.log(cell);
     let coords = [Number(cell.id[0]), Number(cell.id[1])];   
-    console.log(coords);
     if(player.getGameboard().isPlaceAvailable(ship, coords[0], coords[1], isVertical))
     {
         currShipIndex[0]++; 
         player.placeShip(ship, coords[0], coords[1], isVertical);
+        document.querySelector(".boat-type").textContent = `Place your ${ships[currShipIndex]}`;
         refreshBoard(player.getGameboard().board);
         
     }
@@ -173,16 +191,10 @@ let placeShip = (ship, cell, isVertical, player, currShipIndex) =>
     return coords;
 }
 
-export let removeClick = () =>
-{
-    let cells = document.querySelectorAll(".cell");
-    cells.forEach(cell => {
-        cell.removeEventListener('click', () => {
-        }, false);
-    });
-}
 let addHoverEffect = (cell, ship, isVertical, player) => {
 
+    
+    cell.classList.remove("empty");  
     for(let i = 0; i < ship.length; i++)
     {
         let coveredCell;
@@ -199,12 +211,15 @@ let addHoverEffect = (cell, ship, isVertical, player) => {
         {
             cell.classList.add("place-available");
             coveredCell.classList.add("place-available");
+            coveredCell.classList.remove("empty");
         }
         else if(coveredCell != null)
         {
             cell.classList.add("place-unavailable");
             coveredCell.classList.add("place-unavailable");
+            coveredCell.classList.remove("empty");
         }
+       
     }
 }
 
@@ -212,15 +227,20 @@ let removeHoverEffect = (cell, ship, isVertical) => {
 
     cell.classList.remove("place-available");
     cell.classList.remove("place-unavailable");
+    if(!cell.classList.contains("occupied"))
+        cell.classList.add("empty");
+    
    for(let i = 0; i < ship.length; i++)
    {
+    let coveredCell;
         if(isVertical)
         {
             try
             {
-                let coveredCell = document.getElementById(`${Number(cell.id[0]) + i}${cell.id[1]}`);
+                coveredCell = document.getElementById(`${Number(cell.id[0]) + i}${cell.id[1]}`);
                 coveredCell.classList.remove("place-available");
                 coveredCell.classList.remove("place-unavailable");
+               
             }
             catch(err)
             {
@@ -231,7 +251,7 @@ let removeHoverEffect = (cell, ship, isVertical) => {
         {
             try
             {
-                let coveredCell = document.getElementById(`${cell.id[0]}${Number(cell.id[1]) + i}`);
+                coveredCell = document.getElementById(`${cell.id[0]}${Number(cell.id[1]) + i}`);
                 coveredCell.classList.remove("place-available");
                 coveredCell.classList.remove("place-unavailable");
             }
@@ -240,5 +260,69 @@ let removeHoverEffect = (cell, ship, isVertical) => {
                 return err;
             }
         }
+        if(!coveredCell.classList.contains("occupied"))
+            coveredCell.classList.add("empty");
+        
    }
 }
+
+export let play = (human, computer) => {
+
+    let computerBoardContainer = document.querySelector(".board-containerc");
+    
+    let computerCells = computerBoardContainer.querySelectorAll(".cell");
+           
+    computerCells.forEach(cell => {
+        cell.addEventListener('mouseenter', () => addMoveHoverEffect(cell));
+        cell.addEventListener('mouseleave', () => removeMoveHoverEffect(cell));
+        cell.addEventListener('click', () => makeMove(cell, human, computer));
+    });
+}
+
+export let makeMove = (cell, player, enemy) => {
+   
+    let coords = [cell.id[0], cell.id[1]];
+    if(player.makeMove(enemy.getGameboard(), coords[0], coords[1]))
+    {
+        refreshBoard(enemy.getGameboard().board, 'c');
+        
+        if(player.hasWon())
+        {
+            displayWinnerScreen("You won!");
+        }
+        else
+        {
+            computerMakesMove(enemy, player);
+        }
+    }
+
+}
+
+export let computerMakesMove = (computer, enemy) => {
+
+    computer.makeRandomMove(enemy.getGameboard());
+    refreshBoard(enemy.getGameboard().board, 'h');
+    if(computer.hasWon())
+    {
+        displayWinnerScreen("Computer won!");
+    }
+}
+
+export let addMoveHoverEffect = (cell) => {
+    
+    if(!cell.classList.contains("missed") && !cell.classList.contains("hit"))
+    {
+        cell.classList.remove("empty");
+        cell.classList.add("place-available");
+    }
+}
+export let removeMoveHoverEffect = (cell) => {
+  
+    cell.classList.remove("place-available");
+    if(!cell.classList.contains("missed") && !cell.classList.contains("hit"))
+    {
+        cell.classList.add("empty");
+    }
+
+}
+
