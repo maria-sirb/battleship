@@ -74,6 +74,7 @@ body{
 }
 .game-container h1{
     text-align: center;
+    font-size: 5vmin;
 }
 .boat-type {
     color: pink;
@@ -105,6 +106,9 @@ button:hover{
 }
 @media (max-width : 400px)
 {
+    .game-container{
+        gap: 10px;
+    }
     .board{
         display: grid;
         grid-template-columns: repeat(10, 25px);
